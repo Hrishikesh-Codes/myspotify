@@ -97,9 +97,11 @@ router.get("/callback", async (req: Request, res: Response) => {
       req.session.save((err) => (err ? reject(err) : resolve()))
     );
 
+    console.log("[auth] session saved OK, id:", req.session.id, "userId:", req.session.userId);
+    console.log("[auth] redirecting to FRONTEND_URL:", FRONTEND_URL);
     res.redirect(FRONTEND_URL);
   } catch (err) {
-    console.error("OAuth callback error:", err);
+    console.error("[auth] OAuth callback error:", err);
     res.redirect(`${FRONTEND_URL}?error=auth_failed`);
   }
 });
@@ -156,6 +158,7 @@ router.get("/refresh", async (req: Request, res: Response) => {
 
 // GET /api/auth/me — returns current user's profile
 router.get("/me", async (req: Request, res: Response) => {
+  console.log("[auth/me] session id:", req.session.id, "userId:", req.session.userId, "secure:", req.secure, "cookie:", req.headers.cookie?.slice(0, 80));
   if (!req.session.userId) {
     return res.status(401).json({ error: "Not authenticated" });
   }
