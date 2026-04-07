@@ -10,7 +10,9 @@ import type {
   SpotifyAlbumRaw,
 } from "@/types/api";
 
-const API_BASE = import.meta.env.VITE_API_URL ?? "";
+// In production, frontend is served from the same origin as the API (no prefix needed).
+// In development, Vite's proxy (vite.config.ts) forwards /api/* to the Express server.
+const API_BASE = "";
 
 async function apiFetch<T>(url: string): Promise<T> {
   const res = await fetch(`${API_BASE}${url}`, { credentials: "include" });

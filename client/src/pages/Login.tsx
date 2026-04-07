@@ -41,7 +41,7 @@ export default function Login() {
 
         {/* Login button */}
         <a
-          href={`${import.meta.env.VITE_API_URL ?? ""}/api/auth/login`}
+          href="/api/auth/login"
           className="w-full flex items-center justify-center gap-3 bg-[#1DB954] hover:bg-[#1ed760] active:scale-95 text-black font-bold text-sm tracking-widest uppercase py-4 px-8 rounded-full transition-all duration-150"
         >
           {/* Spotify mark */}

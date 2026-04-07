@@ -15,7 +15,10 @@ const SPOTIFY_SCOPES = [
   "streaming",
 ].join(" ");
 
-const FRONTEND_URL = process.env.FRONTEND_URL ?? "http://localhost:5173";
+const IS_PROD = process.env.NODE_ENV === "production";
+// In production, frontend is served from the same Express server, so redirect to "/".
+// In development, frontend runs on a separate Vite dev server.
+const FRONTEND_URL = IS_PROD ? "/" : (process.env.FRONTEND_URL ?? "http://localhost:5173");
 
 // GET /api/auth/login — redirects to Spotify OAuth page
 router.get("/login", (_req: Request, res: Response) => {
