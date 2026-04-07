@@ -1,10 +1,25 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useMemo } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+
+const ERROR_MESSAGES: Record<string, string> = {
+  premium_required:
+    "Spotify requires the app owner to have an active Premium subscription. Please check your Spotify account.",
+  invalid_credentials:
+    "Spotify rejected the app credentials. Please contact the developer.",
+  access_denied: "Spotify access was denied. Please try again.",
+  auth_failed: "Authentication failed. Please try again.",
+};
 
 export default function Login() {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  const errorMsg = useMemo(() => {
+    const err = searchParams.get("error");
+    return err ? ERROR_MESSAGES[err] ?? "Something went wrong. Please try again." : null;
+  }, [searchParams]);
 
   // Already authenticated — go home
   useEffect(() => {
@@ -38,6 +53,13 @@ export default function Login() {
           <h1 className="text-4xl font-extrabold tracking-tight text-white">MySpotify</h1>
           <p className="mt-2 text-[#A7A7A7] text-sm">Your personal music companion</p>
         </div>
+
+        {/* Error banner */}
+        {errorMsg && (
+          <div className="w-full bg-red-500/10 border border-red-500/30 rounded-lg px-4 py-3 text-red-400 text-sm text-center">
+            {errorMsg}
+          </div>
+        )}
 
         {/* Login button */}
         <a

@@ -108,9 +108,21 @@ router.get("/callback", async (req: Request, res: Response) => {
     console.log("[auth] session saved OK, id:", req.session.id, "userId:", req.session.userId);
     console.log("[auth] redirecting to FRONTEND_URL:", FRONTEND_URL);
     res.redirect(FRONTEND_URL);
-  } catch (err) {
-    console.error("[auth] OAuth callback error:", err);
-    res.redirect(`${FRONTEND_URL}?error=auth_failed`);
+  } catch (err: unknown) {
+    // Surface the actual Spotify error so users know what went wrong
+    const axiosErr = err as { response?: { status?: number; data?: unknown }; message?: string };
+    const status = axiosErr.response?.status;
+    const data = axiosErr.response?.data;
+    console.error("[auth] OAuth callback error:", JSON.stringify({ status, data, message: axiosErr.message }));
+
+    // Pass a human-readable reason in the query string
+    let reason = "auth_failed";
+    if (status === 403) {
+      reason = "premium_required";
+    } else if (status === 401) {
+      reason = "invalid_credentials";
+    }
+    res.redirect(`${FRONTEND_URL}?error=${reason}`);
   }
 });
 
