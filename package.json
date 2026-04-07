@@ -6,7 +6,7 @@
     "dev": "concurrently \"npm run dev --prefix client\" \"npm run dev --prefix server\"",
     "build": "npm run build --prefix client && npm run build --prefix server && cp -r client/dist server/dist/public",
     "lint": "npm run lint --prefix client && npm run lint --prefix server",
-    "install:all": "npm install && npm install --legacy-peer-deps --prefix client && npm install --prefix server"
+    "install:all": "npm install --legacy-peer-deps && npm install --legacy-peer-deps --prefix client && npm install --legacy-peer-deps --prefix server"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
