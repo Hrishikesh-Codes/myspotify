@@ -1,5 +1,4 @@
 import "dotenv/config";
-import "./types/session"; // ensure session type augmentation is loaded
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
