@@ -16,6 +16,9 @@ const PORT = process.env.PORT ?? 5000;
 const MONGODB_URI = process.env.MONGODB_URI ?? "mongodb://localhost:27017/myspotify";
 const IS_PROD = process.env.NODE_ENV === "production";
 
+// Trust Render's reverse proxy so req.secure is correct and secure cookies are sent
+app.set("trust proxy", 1);
+
 // Middleware
 app.use(helmet({ contentSecurityPolicy: false }));
 
