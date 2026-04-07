@@ -10,8 +10,10 @@ import type {
   SpotifyAlbumRaw,
 } from "@/types/api";
 
+const API_BASE = import.meta.env.VITE_API_URL ?? "";
+
 async function apiFetch<T>(url: string): Promise<T> {
-  const res = await fetch(url, { credentials: "include" });
+  const res = await fetch(`${API_BASE}${url}`, { credentials: "include" });
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
     throw new Error((body as { error?: string }).error ?? `HTTP ${res.status}`);
