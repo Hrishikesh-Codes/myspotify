@@ -1,0 +1,120 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    font-family: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-background text-text-primary;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-elevated rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-border;
+  }
+}
+
+@layer components {
+  /* Card base */
+  .card {
+    @apply bg-surface border border-border rounded-xl transition-all duration-200;
+  }
+
+  .card-hover {
+    @apply hover:-translate-y-0.5 hover:shadow-purple-glow;
+  }
+
+  /* Skeleton shimmer */
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      theme("colors.elevated") 25%,
+      theme("colors.primary-glow" / 10%) 50%,
+      theme("colors.elevated") 75%
+    );
+    background-size: 200% 100%;
+    @apply animate-shimmer rounded;
+  }
+
+  /* Nav item active state */
+  .nav-item-active {
+    @apply bg-primary/10 text-text-primary border-l-2 border-primary;
+  }
+
+  /* Primary pill button */
+  .btn-primary {
+    @apply bg-primary hover:bg-primary-hover text-white rounded-full px-5 py-2 font-semibold text-sm
+           transition-all duration-200 ring-0 hover:ring-2 hover:ring-primary-glow/30;
+  }
+
+  /* Ghost button */
+  .btn-ghost {
+    @apply bg-transparent border border-border text-text-secondary hover:bg-elevated
+           rounded-full px-5 py-2 font-semibold text-sm transition-all duration-200;
+  }
+
+  /* Play button gradient */
+  .play-btn {
+    @apply bg-gradient-to-br from-primary to-accent-pink text-white rounded-full
+           flex items-center justify-center shadow-purple-glow
+           transition-all duration-200 hover:scale-105 animate-scale-in;
+  }
+
+  /* Genre / mood tag */
+  .tag {
+    @apply bg-elevated border border-border text-text-secondary text-xs rounded-full px-3 py-1
+           transition-all duration-150 cursor-pointer;
+  }
+
+  .tag-active {
+    @apply bg-primary/20 border-primary-glow text-primary-glow;
+  }
+}
+
+@layer utilities {
+  .text-gradient-purple {
+    @apply bg-gradient-to-r from-primary to-accent-pink bg-clip-text text-transparent;
+  }
+
+  .page-gradient {
+    background: linear-gradient(
+      180deg,
+      rgba(139, 92, 246, 0.05) 0%,
+      transparent 300px
+    );
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(232, 121, 249, 0.6); }
+    50%       { box-shadow: 0 0 0 4px rgba(232, 121, 249, 0); }
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+}
