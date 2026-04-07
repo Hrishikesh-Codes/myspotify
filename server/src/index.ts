@@ -19,6 +19,12 @@ const IS_PROD = process.env.NODE_ENV === "production";
 // Trust Render's reverse proxy so req.secure is correct and secure cookies are sent
 app.set("trust proxy", 1);
 
+// ── Debug: log every incoming request so we can trace the OAuth flow ──
+app.use((req, _res, next) => {
+  console.log(`[req] ${req.method} ${req.originalUrl}`);
+  next();
+});
+
 // Middleware
 app.use(helmet({ contentSecurityPolicy: false }));
 
@@ -56,9 +62,22 @@ app.use("/api/me", meRoutes);
 app.use("/api/search", searchRoutes);
 app.use("/api/item", itemRoutes);
 
-// Health check
+// Health check + diagnostics
 app.get("/health", (_req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
+});
+
+app.get("/api/debug", (_req, res) => {
+  res.json({
+    env: {
+      NODE_ENV: process.env.NODE_ENV,
+      HAS_CLIENT_ID: !!process.env.SPOTIFY_CLIENT_ID,
+      HAS_CLIENT_SECRET: !!process.env.SPOTIFY_CLIENT_SECRET,
+      REDIRECT_URI: process.env.SPOTIFY_REDIRECT_URI,
+      VITE_API_URL: process.env.VITE_API_URL ?? "(not set)",
+    },
+    timestamp: new Date().toISOString(),
+  });
 });
 
 // Serve React app in production
@@ -66,7 +85,8 @@ if (IS_PROD) {
   const staticDir = path.join(__dirname, "public");
   app.use(express.static(staticDir));
   // SPA fallback — send index.html for all non-API routes
-  app.get("*", (_req, res) => {
+  app.get("*", (req, res) => {
+    console.log(`[SPA catch-all] serving index.html for: ${req.originalUrl}`);
     res.sendFile(path.join(staticDir, "index.html"));
   });
 } else {

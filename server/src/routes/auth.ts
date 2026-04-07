@@ -22,6 +22,9 @@ const FRONTEND_URL = IS_PROD ? "/" : (process.env.FRONTEND_URL ?? "http://localh
 
 // GET /api/auth/login — redirects to Spotify OAuth page
 router.get("/login", (_req: Request, res: Response) => {
+  console.log("[auth/login] HIT — building Spotify redirect URL");
+  console.log("[auth/login] CLIENT_ID present:", !!process.env.SPOTIFY_CLIENT_ID);
+  console.log("[auth/login] REDIRECT_URI:", process.env.SPOTIFY_REDIRECT_URI);
   const params = new URLSearchParams({
     client_id: process.env.SPOTIFY_CLIENT_ID!,
     response_type: "code",
@@ -29,7 +32,9 @@ router.get("/login", (_req: Request, res: Response) => {
     scope: SPOTIFY_SCOPES,
     show_dialog: "false",
   });
-  res.redirect(`https://accounts.spotify.com/authorize?${params}`);
+  const spotifyUrl = `https://accounts.spotify.com/authorize?${params}`;
+  console.log("[auth/login] Redirecting to:", spotifyUrl.slice(0, 120) + "...");
+  res.redirect(spotifyUrl);
 });
 
 // GET /api/auth/callback — exchanges code for tokens, upserts user, sets session
