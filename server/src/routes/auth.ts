@@ -42,7 +42,10 @@ router.get("/callback", async (req: Request, res: Response) => {
   const { code, error } = req.query;
 
   if (error || !code) {
-    return res.redirect(`${FRONTEND_URL}?error=access_denied`);
+    // Redirect to /login directly so the error query param survives
+    // (redirecting to "/" would hit ProtectedRoute which strips query params)
+    const loginPath = IS_PROD ? "/login" : `${FRONTEND_URL}/login`;
+    return res.redirect(`${loginPath}?error=access_denied`);
   }
 
   try {
@@ -122,7 +125,8 @@ router.get("/callback", async (req: Request, res: Response) => {
     } else if (status === 401) {
       reason = "invalid_credentials";
     }
-    res.redirect(`${FRONTEND_URL}?error=${reason}`);
+    const loginPath = IS_PROD ? "/login" : `${FRONTEND_URL}/login`;
+    res.redirect(`${loginPath}?error=${reason}`);
   }
 });
 
