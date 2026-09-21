@@ -1,24 +1,12 @@
 # MySpotify
 
-A personal Spotify companion that goes beyond the official app — real-time playback, deep listening history, and a full analytics suite that visualises your music taste with statistical analysis.
+A full-stack Spotify companion built around a statistics module written from scratch — OLS regression, k-means clustering, and z-score anomaly detection implemented directly in TypeScript, with no stats library, and unit-tested against known results.
 
----
+Spotify tells you *what* you listened to. MySpotify looks for structure in it: whether your mood is trending over time, which hours you listen unusually heavily, and which clusters your taste actually falls into.
 
-## Screenshots
+React + TypeScript client, Express + MongoDB API, 102 passing tests, CI on every push.
 
-> _Add screenshots here after first deployment._
-
-| Dashboard | Mood Trends | Taste DNA |
-|---|---|---|
-| ![Dashboard](docs/screenshots/dashboard.png) | ![Mood Trends](docs/screenshots/mood-trends.png) | ![Taste DNA](docs/screenshots/taste-dna.png) |
-
----
-
-## Live Demo
-
-[**→ myspotify.vercel.app**](https://myspotify.vercel.app) _(placeholder — update after deploy)_
-
-> **Note**: The app is in Spotify Development Mode. To log in, your Spotify email must be added to the allowlist — see [DEPLOYMENT.md](DEPLOYMENT.md#2-spotify-developer-app).
+> **On running it yourself:** this app is registered in Spotify **Development Mode**, which restricts OAuth to accounts the developer has explicitly allowlisted. That is a Spotify API policy, not a project limitation — a public demo link would fail to log anyone in, so there deliberately isn't one. [DEPLOYMENT.md](DEPLOYMENT.md) covers running it against your own Spotify app in a few minutes.
 
 ---
 
@@ -77,7 +65,7 @@ A personal Spotify companion that goes beyond the official app — real-time pla
 ### 1. Clone and install
 
 ```bash
-git clone https://github.com/your-username/myspotify.git
+git clone https://github.com/Hrishikesh-Codes/myspotify.git
 cd myspotify
 
 # Client
@@ -120,7 +108,7 @@ Open [http://localhost:5173](http://localhost:5173).
 # Server — Jest + Supertest (33 tests, no DB connection required)
 npm test --prefix server
 
-# Client — Vitest + React Testing Library (45 tests)
+# Client — Vitest + React Testing Library (69 tests)
 npm test --prefix client
 
 # Stats utility unit tests only
@@ -215,7 +203,7 @@ These power the analytics pages: regression finds your mood trend, z-score flags
 
 Every push and pull request runs two parallel GitHub Actions jobs (`.github/workflows/ci.yml`):
 
-1. **Client**: ESLint → `tsc --noEmit` → Vitest (45 tests)
+1. **Client**: ESLint → `tsc --noEmit` → Vitest (69 tests)
 2. **Server**: ESLint → `tsc --noEmit` → Jest (33 tests)
 
 Both jobs must pass before merging to `main`.
